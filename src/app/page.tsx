@@ -2,11 +2,13 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, Star, MapPin } from "lucide-react";
+import { ArrowRight, Star, MapPin, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { DESTINATIONS } from "@/constants/data";
+import { useStore } from "@/store/useStore";
+import { cn } from "@/lib/utils";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -14,6 +16,9 @@ const fadeIn = {
 };
 
 export default function Home() {
+  const favorites = useStore((state) => state.favorites);
+  const toggleFavorite = useStore((state) => state.toggleFavorite);
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
@@ -81,43 +86,63 @@ export default function Home() {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {DESTINATIONS.map((dest, index) => (
-              <motion.div
-                key={dest.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <Link href={`/destinos/${dest.id}`}>
-                  <Card className="group overflow-hidden border-zinc-800 bg-zinc-950/50 hover:bg-zinc-900 transition-all duration-300 hover:ring-2 hover:ring-primary/50">
-                    <div className="relative h-64 overflow-hidden">
-                      <div 
-                        className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                        style={{ backgroundImage: `url(${dest.image})` }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                      <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md px-2 py-1 rounded flex items-center gap-1">
-                        <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                        <span className="text-white text-sm font-medium">{dest.rating}</span>
+            {DESTINATIONS.map((dest, index) => {
+              const isFavorite = favorites.includes(dest.id);
+              return (
+                <motion.div
+                  key={dest.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <Link href={`/destinos/${dest.id}`}>
+                    <Card className="group overflow-hidden border-zinc-800 bg-zinc-950/50 hover:bg-zinc-900 transition-all duration-300 hover:ring-2 hover:ring-primary/50 relative">
+                      
+                      {/* Botón de Favorito */}
+                      <button 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          toggleFavorite(dest.id);
+                        }}
+                        className="absolute top-4 left-4 z-20 p-2 rounded-full bg-black/50 backdrop-blur-md hover:bg-black/70 transition-colors"
+                      >
+                        <Heart 
+                          className={cn(
+                            "w-4 h-4 transition-colors", 
+                            isFavorite ? "fill-primary text-primary" : "text-white hover:text-primary"
+                          )} 
+                        />
+                      </button>
+
+                      <div className="relative h-64 overflow-hidden">
+                        <div 
+                          className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                          style={{ backgroundImage: `url(${dest.image})` }}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10" />
+                        <div className="absolute top-4 right-4 z-20 bg-black/50 backdrop-blur-md px-2 py-1 rounded flex items-center gap-1">
+                          <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                          <span className="text-white text-sm font-medium">{dest.rating}</span>
+                        </div>
+                        <div className="absolute bottom-4 left-4 right-4 z-20">
+                          <Badge variant="secondary" className="mb-2 bg-primary/20 text-primary hover:bg-primary/30 border-none">
+                            {dest.category}
+                          </Badge>
+                          <h3 className="text-xl font-bold text-white truncate">{dest.name}</h3>
+                        </div>
                       </div>
-                      <div className="absolute bottom-4 left-4 right-4">
-                        <Badge variant="secondary" className="mb-2 bg-primary/20 text-primary hover:bg-primary/30 border-none">
-                          {dest.category}
-                        </Badge>
-                        <h3 className="text-xl font-bold text-white truncate">{dest.name}</h3>
-                      </div>
-                    </div>
-                    <CardContent className="p-4">
-                      <div className="flex items-start gap-2 text-muted-foreground">
-                        <MapPin className="w-4 h-4 mt-1 flex-shrink-0" />
-                        <p className="text-sm line-clamp-2">{dest.description}</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              </motion.div>
-            ))}
+                      <CardContent className="p-4 relative z-20">
+                        <div className="flex items-start gap-2 text-muted-foreground">
+                          <MapPin className="w-4 h-4 mt-1 flex-shrink-0" />
+                          <p className="text-sm line-clamp-2">{dest.description}</p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
