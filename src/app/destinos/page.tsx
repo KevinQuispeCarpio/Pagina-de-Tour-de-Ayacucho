@@ -4,9 +4,14 @@ import { motion } from "framer-motion";
 import { DESTINATIONS } from "@/constants/data";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Star } from "lucide-react";
+import { MapPin, Star, Heart } from "lucide-react";
+import { useStore } from "@/store/useStore";
+import { cn } from "@/lib/utils";
 
 export default function DestinosPage() {
+  const favorites = useStore((state) => state.favorites);
+  const toggleFavorite = useStore((state) => state.toggleFavorite);
+
   return (
     <div className="pt-24 pb-16 min-h-screen bg-background">
       <div className="container mx-auto px-4">
@@ -20,46 +25,68 @@ export default function DestinosPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {DESTINATIONS.map((dest, index) => (
-            <motion.div
-              key={dest.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <Card className="group overflow-hidden border-zinc-800 bg-zinc-950/50 hover:bg-zinc-900 transition-all duration-300">
-                <div className="relative h-72 overflow-hidden">
-                  <div 
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                    style={{ backgroundImage: `url(${dest.image})` }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                  <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md px-2 py-1 rounded flex items-center gap-1">
-                    <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                    <span className="text-white text-sm font-medium">{dest.rating}</span>
+          {DESTINATIONS.map((dest, index) => {
+            const isFavorite = favorites.includes(dest.id);
+            
+            return (
+              <motion.div
+                key={dest.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <Card className="group overflow-hidden border-zinc-800 bg-zinc-950/50 hover:bg-zinc-900 transition-all duration-300 relative">
+                  {/* Botón de Favorito */}
+                  <button 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      toggleFavorite(dest.id);
+                    }}
+                    className="absolute top-4 left-4 z-20 p-2 rounded-full bg-black/50 backdrop-blur-md hover:bg-black/70 transition-colors"
+                  >
+                    <Heart 
+                      className={cn(
+                        "w-5 h-5 transition-colors", 
+                        isFavorite ? "fill-primary text-primary" : "text-white hover:text-primary"
+                      )} 
+                    />
+                  </button>
+                  
+                  <div className="relative h-72 overflow-hidden">
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                      style={{ backgroundImage: `url(${dest.image})` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-10" />
+                    
+                    <div className="absolute top-4 right-4 z-20 bg-black/50 backdrop-blur-md px-2 py-1 rounded flex items-center gap-1">
+                      <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                      <span className="text-white text-sm font-medium">{dest.rating}</span>
+                    </div>
+                    
+                    <div className="absolute bottom-4 left-4 right-4 z-20">
+                      <Badge variant="secondary" className="mb-3 bg-primary/20 text-primary border-none">
+                        {dest.category}
+                      </Badge>
+                      <h3 className="text-2xl font-bold text-white mb-1">{dest.name}</h3>
+                    </div>
                   </div>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <Badge variant="secondary" className="mb-3 bg-primary/20 text-primary border-none">
-                      {dest.category}
-                    </Badge>
-                    <h3 className="text-2xl font-bold text-white mb-1">{dest.name}</h3>
-                  </div>
-                </div>
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-3 text-muted-foreground mb-4">
-                    <MapPin className="w-5 h-5 mt-0.5 flex-shrink-0 text-primary" />
-                    <p className="text-base leading-relaxed">{dest.description}</p>
-                  </div>
-                  <div className="flex justify-between items-center pt-4 border-t border-zinc-800">
-                    <span className="text-sm text-zinc-400">Precio referencial</span>
-                    <span className="font-bold text-lg text-white">
-                      {dest.price === 0 ? "Gratis" : `S/ ${dest.price}`}
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+                  <CardContent className="p-6 relative z-20">
+                    <div className="flex items-start gap-3 text-muted-foreground mb-4">
+                      <MapPin className="w-5 h-5 mt-0.5 flex-shrink-0 text-primary" />
+                      <p className="text-base leading-relaxed">{dest.description}</p>
+                    </div>
+                    <div className="flex justify-between items-center pt-4 border-t border-zinc-800">
+                      <span className="text-sm text-zinc-400">Precio referencial</span>
+                      <span className="font-bold text-lg text-white">
+                        {dest.price === 0 ? "Gratis" : `S/ ${dest.price}`}
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </div>
