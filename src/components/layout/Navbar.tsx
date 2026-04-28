@@ -8,9 +8,16 @@ import { Map, MapPin, Utensils, Info, Menu, X, ShoppingBag } from "lucide-react"
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 
+import { useStore } from "@/store/useStore";
+import { Heart } from "lucide-react";
+
 export function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = React.useState(false);
+  
+  // Zustand state
+  const cart = useStore((state) => state.cart);
+  const favorites = useStore((state) => state.favorites);
 
   const routes = [
     { href: "/", label: "Inicio", icon: Map },
@@ -50,11 +57,23 @@ export function Navbar() {
             </Link>
           ))}
           <div className="ml-4 flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="relative">
-              <ShoppingBag className="w-5 h-5" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full"></span>
+            <Button variant="ghost" size="icon" className="relative text-muted-foreground hover:text-primary">
+              <Heart className="w-5 h-5" />
+              {favorites.length > 0 && (
+                <span className="absolute 0 top-0 right-0 w-4 h-4 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+                  {favorites.length}
+                </span>
+              )}
             </Button>
-            <Button className="rounded-full">Reservar Tour</Button>
+            <Button variant="ghost" size="icon" className="relative text-muted-foreground hover:text-primary">
+              <ShoppingBag className="w-5 h-5" />
+              {cart.length > 0 && (
+                <span className="absolute top-0 right-0 w-4 h-4 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+                  {cart.length}
+                </span>
+              )}
+            </Button>
+            <Button className="rounded-full ml-2">Reservar Tour</Button>
           </div>
         </nav>
 
