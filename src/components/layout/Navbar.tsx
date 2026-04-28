@@ -65,14 +65,16 @@ export function Navbar() {
                 </span>
               )}
             </Button>
-            <Button variant="ghost" size="icon" className="relative text-muted-foreground hover:text-primary">
-              <ShoppingBag className="w-5 h-5" />
-              {cart.length > 0 && (
-                <span className="absolute top-0 right-0 w-4 h-4 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
-                  {cart.length}
-                </span>
-              )}
-            </Button>
+            <Link href="/checkout">
+              <Button variant="ghost" size="icon" className="relative text-muted-foreground hover:text-primary">
+                <ShoppingBag className="w-5 h-5" />
+                {cart.length > 0 && (
+                  <span className="absolute top-0 right-0 w-4 h-4 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+                    {cart.length}
+                  </span>
+                )}
+              </Button>
+            </Link>
             <Button className="rounded-full ml-2">Reservar Tour</Button>
           </div>
         </nav>
