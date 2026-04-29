@@ -6,7 +6,8 @@ export const DESTINATIONS = [
     image: "https://images.unsplash.com/photo-1587595431973-160d0d94add1?q=80&w=2000&auto=format&fit=crop", // placeholder
     category: "Historia",
     rating: 4.9,
-    price: 0
+    price: 0,
+    coordinates: [-13.160126, -74.225575]
   },
   {
     id: "complejo-wari",
@@ -15,7 +16,8 @@ export const DESTINATIONS = [
     image: "https://images.unsplash.com/photo-1526392060635-9d60198d3de3?q=80&w=2000&auto=format&fit=crop",
     category: "Arqueología",
     rating: 4.8,
-    price: 15
+    price: 15,
+    coordinates: [-13.061751, -74.195159]
   },
   {
     id: "pampa-ayacucho",
@@ -24,7 +26,8 @@ export const DESTINATIONS = [
     image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=2000&auto=format&fit=crop",
     category: "Historia",
     rating: 4.9,
-    price: 0
+    price: 0,
+    coordinates: [-13.044167, -74.143611]
   },
   {
     id: "aguas-turquesas",
@@ -33,7 +36,8 @@ export const DESTINATIONS = [
     image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2000&auto=format&fit=crop",
     category: "Naturaleza",
     rating: 5.0,
-    price: 50
+    price: 50,
+    coordinates: [-13.636667, -73.978056]
   }
 ];
 

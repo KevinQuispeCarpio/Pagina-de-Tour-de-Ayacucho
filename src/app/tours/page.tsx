@@ -1,11 +1,13 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Map, Calendar, Clock, Check, ShoppingBag } from "lucide-react";
+import { Map, Calendar, Clock, Check, ShoppingBag, Filter } from "lucide-react";
 import { useStore } from "@/store/useStore";
+import { cn } from "@/lib/utils";
 
 import { TOURS } from "@/constants/data";
 
@@ -13,6 +15,14 @@ export default function ToursPage() {
   const cart = useStore((state) => state.cart);
   const addToCart = useStore((state) => state.addToCart);
   const removeFromCart = useStore((state) => state.removeFromCart);
+  const [activeFilter, setActiveFilter] = useState<string>("Todas");
+
+  const filters = ["Todas", "Full Day", "Half Day"];
+
+  const filteredTours = useMemo(() => {
+    if (activeFilter === "Todas") return TOURS;
+    return TOURS.filter(t => t.duration.includes(activeFilter));
+  }, [activeFilter]);
 
   return (
     <div className="pt-24 pb-16 min-h-screen bg-background">
@@ -22,13 +32,37 @@ export default function ToursPage() {
           <h1 className="text-4xl md:text-5xl font-bold font-[family-name:var(--font-playfair)] mb-4">
             Paquetes Turísticos
           </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl">
+          <p className="text-muted-foreground text-lg max-w-2xl mb-8">
             Reserva las mejores experiencias guiadas en Ayacucho. Añade tours a tu carrito y planifica tu viaje perfecto.
           </p>
+
+          {/* Barra de Filtros */}
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-2 mr-4 text-zinc-400">
+              <Filter className="w-5 h-5" />
+              <span className="text-sm font-medium">Filtrar por Duración:</span>
+            </div>
+            {filters.map(filter => (
+              <Button
+                key={filter}
+                variant={activeFilter === filter ? "default" : "outline"}
+                className={cn(
+                  "rounded-full transition-all",
+                  activeFilter === filter 
+                    ? "bg-primary text-primary-foreground shadow-md shadow-primary/20" 
+                    : "border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700"
+                )}
+                onClick={() => setActiveFilter(filter)}
+              >
+                {filter}
+              </Button>
+            ))}
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {TOURS.map((tour, index) => {
+        <motion.div layout className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <AnimatePresence mode="popLayout">
+            {filteredTours.map((tour, index) => {
             const inCart = cart.includes(tour.id);
             
             return (
@@ -86,7 +120,8 @@ export default function ToursPage() {
               </motion.div>
             );
           })}
-        </div>
+          </AnimatePresence>
+        </motion.div>
       </div>
     </div>
   );

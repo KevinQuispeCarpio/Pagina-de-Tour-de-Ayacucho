@@ -9,15 +9,30 @@ import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { useStore } from "@/store/useStore";
-import { Heart } from "lucide-react";
+import { Heart, Search } from "lucide-react";
+import { SearchModal } from "@/components/ui/search-modal";
 
 export function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isSearchOpen, setIsSearchOpen] = React.useState(false);
+
+  // Escuchar Cmd+K o Ctrl+K
+  React.useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setIsSearchOpen((open) => !open);
+      }
+    };
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
+  }, []);
   
   // Zustand state
   const cart = useStore((state) => state.cart);
   const favorites = useStore((state) => state.favorites);
+  const user = useStore((state) => state.user);
 
   const routes = [
     { href: "/", label: "Inicio", icon: Map },
@@ -57,6 +72,14 @@ export function Navbar() {
             </Link>
           ))}
           <div className="ml-4 flex items-center gap-2">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="text-muted-foreground hover:text-primary"
+              onClick={() => setIsSearchOpen(true)}
+            >
+              <Search className="w-5 h-5" />
+            </Button>
             <Link href="/favoritos">
               <Button variant="ghost" size="icon" className="relative text-muted-foreground hover:text-primary">
                 <Heart className="w-5 h-5" />
@@ -77,12 +100,32 @@ export function Navbar() {
                 )}
               </Button>
             </Link>
-            <Button className="rounded-full ml-2">Reservar Tour</Button>
+            {user ? (
+              <Button asChild variant="outline" className="rounded-full ml-2 border-zinc-800 hover:bg-zinc-800 gap-2">
+                <Link href="/perfil">
+                  <div className="w-5 h-5 rounded-full overflow-hidden bg-primary/20">
+                    <img src={user.avatar} alt="Avatar" className="w-full h-full object-cover" />
+                  </div>
+                  Mi Perfil
+                </Link>
+              </Button>
+            ) : (
+              <Button asChild className="rounded-full ml-2">
+                <Link href="/login">Iniciar Sesión</Link>
+              </Button>
+            )}
           </div>
         </nav>
 
         {/* Mobile Toggle */}
         <div className="md:hidden flex items-center gap-2">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={() => setIsSearchOpen(true)}
+          >
+            <Search className="w-5 h-5" />
+          </Button>
           <Button variant="ghost" size="icon" onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </Button>
@@ -120,6 +163,7 @@ export function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
+      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </header>
   );
 }
