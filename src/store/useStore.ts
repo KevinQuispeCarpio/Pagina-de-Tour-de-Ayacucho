@@ -9,6 +9,7 @@ interface StoreState {
   toggleFavorite: (id: string) => void;
   addToCart: (id: string) => void;
   removeFromCart: (id: string) => void;
+  clearCart: () => void;
 }
 
 export const useStore = create<StoreState>()(
@@ -28,6 +29,7 @@ export const useStore = create<StoreState>()(
       addToCart: (id) => set((state) => ({ cart: [...state.cart, id] })),
       removeFromCart: (id) =>
         set((state) => ({ cart: state.cart.filter((cartId) => cartId !== id) })),
+      clearCart: () => set({ cart: [] }),
     }),
     {
       name: 'ayacucho-tour-storage', // name of the item in the storage (must be unique)
