@@ -57,14 +57,16 @@ export function Navbar() {
             </Link>
           ))}
           <div className="ml-4 flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="relative text-muted-foreground hover:text-primary">
-              <Heart className="w-5 h-5" />
-              {favorites.length > 0 && (
-                <span className="absolute 0 top-0 right-0 w-4 h-4 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
-                  {favorites.length}
-                </span>
-              )}
-            </Button>
+            <Link href="/favoritos">
+              <Button variant="ghost" size="icon" className="relative text-muted-foreground hover:text-primary">
+                <Heart className="w-5 h-5" />
+                {favorites.length > 0 && (
+                  <span className="absolute 0 top-0 right-0 w-4 h-4 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+                    {favorites.length}
+                  </span>
+                )}
+              </Button>
+            </Link>
             <Link href="/checkout">
               <Button variant="ghost" size="icon" className="relative text-muted-foreground hover:text-primary">
                 <ShoppingBag className="w-5 h-5" />
