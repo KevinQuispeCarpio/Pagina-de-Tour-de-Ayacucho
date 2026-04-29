@@ -10,6 +10,7 @@ import { MapPin, Star, Heart, Filter, Map, Grid } from "lucide-react";
 import { useStore } from "@/store/useStore";
 import { cn } from "@/lib/utils";
 import { MapView } from "@/components/ui/map";
+import Link from "next/link";
 
 export default function DestinosPage() {
   const favorites = useStore((state) => state.favorites);
@@ -141,12 +142,15 @@ export default function DestinosPage() {
                         <MapPin className="w-5 h-5 mt-0.5 flex-shrink-0 text-primary" />
                         <p className="text-base leading-relaxed">{dest.description}</p>
                       </div>
-                      <div className="flex justify-between items-center pt-4 border-t border-zinc-800">
-                        <span className="text-sm text-zinc-400">Precio referencial</span>
-                        <span className="font-bold text-lg text-white">
-                          {dest.price === 0 ? "Gratis" : `S/ ${dest.price}`}
-                        </span>
-                      </div>
+                      <div className="flex justify-between items-center pt-4 border-t border-zinc-800 mb-4">
+                      <span className="text-sm text-zinc-400">Precio referencial</span>
+                      <span className="font-bold text-lg text-white">
+                        {dest.price === 0 ? "Gratis" : `S/ ${dest.price}`}
+                      </span>
+                    </div>
+                    <Button asChild className="w-full rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white">
+                      <Link href={`/destinos/${dest.id}`}>Ver Detalles y Reseñas</Link>
+                    </Button>
                     </CardContent>
                   </Card>
                 </motion.div>

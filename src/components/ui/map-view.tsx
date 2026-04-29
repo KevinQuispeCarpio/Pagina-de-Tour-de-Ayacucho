@@ -75,7 +75,7 @@ export default function MapView({ locations }: MapViewProps) {
                   <h4 className="font-bold text-sm mb-1">{loc.name}</h4>
                   <p className="text-xs text-zinc-400 mb-2 line-clamp-2">{loc.description}</p>
                   <Button size="sm" className="w-full h-8 text-xs rounded-md" asChild>
-                    <Link href={`/destinos`}>Ver Destino</Link>
+                    <Link href={`/destinos/${loc.id}`}>Ver Destino</Link>
                   </Button>
                 </div>
               </div>
