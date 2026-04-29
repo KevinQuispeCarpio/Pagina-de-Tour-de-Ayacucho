@@ -91,3 +91,33 @@ export const TOURS = [
   }
 ];
 
+export const CULTURE_ITEMS = [
+  {
+    id: "semana-santa",
+    title: "Semana Santa",
+    description: "La segunda Semana Santa más importante del mundo. Diez días de fervor, procesiones majestuosas y alfombras florales en toda la ciudad.",
+    image: "https://images.unsplash.com/photo-1544027984-754641fe03f9?q=80&w=2000&auto=format&fit=crop",
+    category: "Festividad"
+  },
+  {
+    id: "retablos",
+    title: "Retablos Ayacuchanos",
+    description: "Cajas mágicas de madera que cuentan historias a través de cientos de figuras en miniatura modeladas en pasta de papa.",
+    image: "https://images.unsplash.com/photo-1605335133612-9c59573887d1?q=80&w=2000&auto=format&fit=crop",
+    category: "Artesanía"
+  },
+  {
+    id: "carnavales",
+    title: "Carnavales",
+    description: "Tres días de música, danza y color donde las comparsas toman las calles cantando en quechua y español.",
+    image: "https://images.unsplash.com/photo-1561578330-802c31e9c2ec?q=80&w=2000&auto=format&fit=crop",
+    category: "Festividad"
+  },
+  {
+    id: "ceramica-quinua",
+    title: "Cerámica de Quinua",
+    description: "Iglesias de barro que protegen los techos de las casas, músicos y toritos moldeados por artesanos de Quinua.",
+    image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=2000&auto=format&fit=crop",
+    category: "Artesanía"
+  }
+];
